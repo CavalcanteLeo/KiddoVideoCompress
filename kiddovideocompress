@@ -1,28 +1,35 @@
 
 #!/usr/bin/env bash
 
-
 bold=$(tput bold)
 normal=$(tput sgr0)
 files='*.mp4'
-original_dir_size=$(du -sh | awk '{print $1}');
-original_dir_size_int=${original_dir_size:0:${#original_dir_size}-1}
 mkdir -p ./compressed
+total_itens=0
+
 
 for file in $files
 do
   if [ -f $file ]
   then
+    total_itens=$((total_itens+1))
     echo "Comprimindo:${bold} $file ${normal}"
-    ffmpeg -i ./$file -vcodec h264 -acodec mp2 ./compressed/$file
+    ffmpeg -i ./$file -vcodec h264 -acodec mp2 -y  ./compressed/$file
   else
     echo "Nenhum vídeo encontrado."
   fi
 done
 
-compressed_dir_size=$(du -sh ./compressed | awk '{print $1}');
-compressed_dir_size_int=${compressed_dir_size:0:${#compressed_dir_size}-1}
+echo $a
 
+original_size=$(du -ch -- ./*mp4 | tail -n 1 | awk '{print $1}')
+original_dir_size_int=${original_size:0:${#original_size}-1}
+
+
+compressed_size=$(du -ch -- ./compressed/*mp4 | tail -n 1 | awk '{print $1}')
+compressed_dir_size_int=${compressed_size:0:${#compressed_size}-1}
+
+difference_int=$(( original_dir_size_int - compressed_dir_size_int ))
 
 echo ""
 echo ""
@@ -35,7 +42,7 @@ echo ""
 echo ""
 
 
-echo "Todos vídeos foram comprímidos, na pasta $PWD/compressed"
-echo "Vídeos passaram de ${bold}$original_dir_size${normal} para ${bold}$compressed_dir_size${normal}, uma economia de${bold} $(( original_dir_size_int - compressed_dir_size_int ))MB ${normal}"
+echo "Foram comprimidos ${bold}$total_itens vídeos${normal}, na pasta $PWD/compressed"
+echo "Vídeos passaram de ${bold}${original_size}b${normal} para ${bold}${compressed_size}b${normal}, uma economia de${bold} ${difference_int}Mb ${normal} (redução de $(( 100-(compressed_dir_size_int * 100/ original_dir_size_int) ))%)"
 echo "Desenvolvido por ${bold}Leonardo Cavalcante${normal}"
 echo "Kiddo: ${bold}https://kiddolabs.com/${normal}"
