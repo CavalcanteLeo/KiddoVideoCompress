@@ -1,8 +1,24 @@
 
 #!/usr/bin/env bash
 
-bold=$(tput bold)
-normal=$(tput sgr0)
+# normal=$(tput sgr0)                       # normal text
+normal=$'\e[0m'                           # (works better sometimes)
+bold=$(tput bold)                         # make colors bold/bright
+red="$bold$(tput setaf 1)"                # bright red text
+green=$(tput setaf 2)                     # dim green text
+fawn=$(tput setaf 3); beige="$fawn"       # dark yellow text
+yellow_light="$bold$fawn"
+yellow="\033[01;38;5;226m"                     # bright yellow text
+darkblue=$(tput setaf 4)                  # dim blue text
+blue="$bold$darkblue"                     # bright blue text
+purple=$(tput setaf 5); magenta="$purple" # magenta text
+pink="$bold$purple"                       # bright magenta text
+darkcyan=$(tput setaf 6)                  # dim cyan text
+cyan="$bold$darkcyan"                     # bright cyan text
+gray=$(tput setaf 7)                      # dim white text
+darkgray="$bold"$(tput setaf 0)
+
+
 files='*.mp4'
 mkdir -p ./compressed
 total_itens=0
@@ -32,17 +48,18 @@ compressed_dir_size_int=${compressed_size:0:${#compressed_size}-1}
 difference_int=$(( original_dir_size_int - compressed_dir_size_int ))
 
 echo ""
-echo ""
-echo    "██     ██   ██   ██████      ██████       ██████  "
-echo    "██   ██     ██   ██    ██    ██    ██    ██    ██ "
-echo    "█████       ██   ██     ██   ██     ██   ██    ██ "
-echo    "██   ██     ██   ██    ██    ██    ██    ██    ██ "
-echo    "██     ██   ██   ██████      ██████       ██████  "
-echo ""
+echo "$yellow"
+echo    "          ██     ██   ██   ██████      ██████       ██████  "
+echo    "          ██   ██     ██   ██    ██    ██    ██    ██    ██ "
+echo    "          █████       ██   ██     ██   ██     ██   ██    ██ "
+echo    "          ██   ██     ██   ██    ██    ██    ██    ██    ██ "
+echo    "          ██     ██   ██   ██████      ██████       ██████  "
+echo "$normal"
 echo ""
 
 
-echo "Foram comprimidos ${bold}$total_itens vídeos${normal}, na pasta $PWD/compressed"
-echo "Vídeos passaram de ${bold}${original_size}b${normal} para ${bold}${compressed_size}b${normal}, uma economia de${bold} ${difference_int}Mb ${normal} (redução de $(( 100-(compressed_dir_size_int * 100/ original_dir_size_int) ))%)"
+echo "Foram comprimidos ${bold}$total_itens vídeos${normal}, na pasta $blue $PWD/compressed $normal"
+echo "Os vídeos passaram de $red${bold}${original_size}b${normal} para $green${bold}${compressed_size}b${normal}, uma economia de ${bold}$green${difference_int}Mb${normal} ou $green$bold$(( 100-(compressed_dir_size_int * 100/ original_dir_size_int)))% $normal   "
+
 echo "Desenvolvido por ${bold}Leonardo Cavalcante${normal}"
-echo "Kiddo: ${bold}https://kiddolabs.com/${normal}"
+echo "Kiddo: $yellow${bold}https://kiddolabs.com/${normal}"
