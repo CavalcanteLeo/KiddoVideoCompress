@@ -18,6 +18,9 @@ cyan="$bold$darkcyan"                     # bright cyan text
 gray=$(tput setaf 7)                      # dim white text
 darkgray="$bold"$(tput setaf 0)
 
+START=$(date +%s)
+
+
 
 files='*.mp4'
 mkdir -p ./compressed
@@ -57,7 +60,21 @@ echo    "          ██     ██   ██   ██████      ██�
 echo "$normal"
 echo ""
 
+END=$(date +%s)
+SECONDS=$(( $END - $START ))
 
+
+
+hours=$(($SECONDS / 3600))
+seconds=$(($SECONDS % 3600))
+minutes=$(($SECONDS / 60))
+seconds=$(($SECONDS % 60))
+
+
+
+
+
+printf "O tempo total para converter todos os vídeos foi de ${bold}%02d:%02d:%02d${normal}\n" $hours $minutes $seconds
 echo "Foram comprimidos ${bold}$total_itens vídeos${normal}, na pasta $blue $PWD/compressed $normal"
 echo "Os vídeos passaram de $red${bold}${original_size}b${normal} para $green${bold}${compressed_size}b${normal}, uma economia de ${bold}$green${difference_int}Mb${normal} ou $green$bold$(( 100-(compressed_dir_size_int * 100/ original_dir_size_int)))% $normal   "
 
